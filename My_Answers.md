@@ -275,18 +275,22 @@ Gurobi solved everything here, but its time grows faster and has long tails (up 
 *Leave this section empty if you do not attempt the bonus. See Section 8 of the guide. Your improved notebook (`StudentID_FirstName_LastName_Assignment1_IMPROVED.ipynb`) must be pushed to your repository.*
 
 ### G.1 (1 mark) - Bug Identification
-
 **Where is the bug?** (cell / function / line numbers in `Assignment_1.ipynb`):
 
-[Paste the faulty line(s) of code]
+At first, I examined vns_solve_cflp(), which already  shakes from best_solution and takes only improving solutions (cell 16, lines 76-111), confirming that the cycling bug indicated in the guide does not exist. 
+The error I discovered is in n2_close_open_facility() (a neighboring cell).
 
+            neighbor_facility_opened = facility_opened.copy()
+            neighbor_facility_opened[j_open] = 0  # Close this one
+            neighbor_facility_opened[j_close] = 1  # Open this one
+            
 **What does the bug do?**
 
-[Describe the specific issue]
+N2 is documented as “close an open facility”, but it closes one and opens another, which makes it a duplicate of N3.
 
 **Why does it degrade VNS performance?**
 
-[Explain the effect on the search and link it to the high gaps (>20%) in your results]
+The search can only add or swap facilities; hence, it cannot eliminate unneeded fixed costs. This helps to explain why most instances (102 of 144) do not improve after the initial solution and why gaps remain significant, particularly in Expensive and Moderate instances where fixed costs are most important.
 
 ---
 
@@ -294,14 +298,14 @@ Gurobi solved everything here, but its time grows faster and has long tails (up 
 
 **Corrected code:**
 
-```python
-# paste your fixed line(s) here
-```
+   for j in opened_indices:
+        if len(neighbors) >= max_neighbors:
+            break
 
+        neighbor_facility_opened = facility_opened.copy()
+        neighbor_facility_opened[j] = 0  # FIX: close only, do NOT open another facility
 **Why does the fix work and why does it not break the rest of the algorithm?**
-
-[Explanation]
-
+It adds the missing "close" move and maintains the feasibility check, so it cannot generate infeasible solutions. The other neighborhoods and the acceptance rule remain unchanged.
 ---
 
 ### G.3 (1 mark) - Demonstrated Improvement
@@ -310,25 +314,20 @@ Gurobi solved everything here, but its time grows faster and has long tails (up 
 
 | Metric | Original VNS | Improved VNS |
 |---|---|---|
-| Mean gap (%) | | |
-| Std of gap (%) | | |
-| Instances with gap < 5% | | |
-| Instances with gap > 20% | | |
-| Mean VNS time (s) | | |
+| Mean gap (%) |13.38|11.24|
+| Std of gap (%) |4.63|4.61|
+| Instances with gap < 5% |4|8|
+| Instances with gap > 20% |14|10|
+| Mean VNS time (s) |0.52|2.03|
 
 **Analysis:**
+Improvement: The fix lowered the mean gap from 13.38% to 11.24% (about 2 points) and doubled the instances below 5% (4 to 8). VNS found a better solution on 120 of 144 instances.
 
-[Discuss the improvement, and any change in running time]
+Running time: VNS became slower, from 0.52 s to 2.03 s on average, so its speedup over Gurobi fell from 5.47x to 1.90x. Part of this is a slower machine, since Gurobi also got slower. The fix lets VNS find more improvements, which takes more time, so the result is better solutions at a higher time cost.
 
-**Improved results files (names in your repository):** ___________
-
----
-
-## Additional Comments (Optional)
-
-[Any additional observations, challenges faced, or insights gained]
-
----
+**Improved results files (names in your repository):**  
+results_student_447540249_Improved.csv
+results_student_447540249_improved.xlsx
 
 ## Declaration
 

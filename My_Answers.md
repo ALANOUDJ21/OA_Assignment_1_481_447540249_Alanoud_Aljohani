@@ -58,6 +58,7 @@ VNS becomes significantly faster at the large size, where its average time is ab
 - For Gurobi: large-expensive (size-difficulty) with time: 12.75 seconds
 
 **Detailed Comparison:**
+
 Gurobi slows down significantly as problems become larger, reaching 12.75 s on large-expensive instances. VNS remains quick, requiring only 1.62 seconds on the same instances, which is about 8 times faster.
 The only exception is in easy instances, when Gurobi is significantly faster (about 0.2 s vs. 0.3 s).
 As a result, VNS is the preferable option when dealing with large or difficult problems. The deal-breaker is quality, its solutions are approximately 13.38% more expensive than Gurobi's.
@@ -194,7 +195,7 @@ I recommend using both, depending on the situation: VNS for quick, recurring dec
 
 **How They Complement Each Other:**
 
-N1-N3 change which facilities are open, and N4 improves client assignments for that choice. When one neighborhood gets stuck, VNS switches to another, so the search escapes local optima and then refines the result.
+n1-n3 change which facilities are open, and N4 improves client assignments for that choice. When one neighborhood gets stuck, VNS switches to another, so the search escapes local optima and then refines the result.
 ---
 
 ### E.2 (1.5 marks) - Convergence Behavior Analysis
@@ -217,6 +218,7 @@ N1-N3 change which facilities are open, and N4 improves client assignments for t
 - What it reveals: VNS got stuck in its first local optimum (9.1% gap) and never improved.
 
 **Role of Shaking Mechanism:**
+
 Shaking perturbs the current solution so local search can leave a local optimum. In Plots 1 and 2, the step drops after flat periods are where shaking found a better solution. In Plot 3, it found none. Even so, every final cost stays above Gurobi’s optimum, so shaking helps but does not close the gap.
 ---
 
@@ -267,6 +269,7 @@ Beyond cost, the business is concerned with service level (on-time delivery), ba
 VNS gives up 13.38% in cost on average. In return it saves about 2.5 s per instance (3.02 s vs 0.52 s), roughly 83% of Gurobi’s total time. The saving comes mostly from hard instances.
 
 **Practical Value of Heuristics:**
+
 Gurobi solved everything here, but its time grows faster and has long tails (up to 107 s). VNS-like heuristics give fast, predictable answers, which matters for re-planning, testing many scenarios and very large problems. The cost is the 13.38% gap, so they suit cases where speed matters more than the best cost.
 ---
 
@@ -305,7 +308,7 @@ The search can only add or swap facilities; hence, it cannot eliminate unneeded 
 
         neighbor_facility_opened = facility_opened.copy()
         neighbor_facility_opened[j] = 0  # FIX: close only, do NOT open another facility
-        ```
+'''
 
 **Why does the fix work and why does it not break the rest of the algorithm?**
 
@@ -325,11 +328,13 @@ It adds the missing "close" move and maintains the feasibility check, so it cann
 | Mean VNS time (s) |0.52|2.03|
 
 **Analysis:**
+
 Improvement: The fix lowered the mean gap from 13.38% to 11.24% (about 2 points) and doubled the instances below 5% (4 to 8). VNS found a better solution on 120 of 144 instances.
 
 Running time: VNS became slower, from 0.52 s to 2.03 s on average, so its speedup over Gurobi fell from 5.47x to 1.90x. Part of this is a slower machine, since Gurobi also got slower. The fix lets VNS find more improvements, which takes more time, so the result is better solutions at a higher time cost.
 
 **Improved results files (names in your repository):**  
+
 results_student_447540249_Improved.csv
 results_student_447540249_improved.xlsx
 

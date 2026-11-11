@@ -62,6 +62,7 @@ VNS becomes significantly faster at the large size, where its average time is ab
 Gurobi slows down significantly as problems become larger, reaching 12.75 s on large-expensive instances. VNS remains quick, requiring only 1.62 seconds on the same instances, which is about 8 times faster.
 The only exception is in easy instances, when Gurobi is significantly faster (about 0.2 s vs. 0.3 s).
 As a result, VNS is the preferable option when dealing with large or difficult problems. The deal-breaker is quality, its solutions are approximately 13.38% more expensive than Gurobi's.
+
 ---
 
 ### B.2 (2 marks) - Speedup Analysis
@@ -195,7 +196,8 @@ I recommend using both, depending on the situation: VNS for quick, recurring dec
 
 **How They Complement Each Other:**
 
-n1-n3 change which facilities are open, and N4 improves client assignments for that choice. When one neighborhood gets stuck, VNS switches to another, so the search escapes local optima and then refines the result.
+N1-N3 change which facilities are open, and N4 improves client assignments for that choice. When one neighborhood gets stuck, VNS switches to another, so the search escapes local optima and then refines the result.
+
 ---
 
 ### E.2 (1.5 marks) - Convergence Behavior Analysis
@@ -335,7 +337,7 @@ Running time: VNS became slower, from 0.52 s to 2.03 s on average, so its speedu
 
 **Improved results files (names in your repository):**  
 
-results_student_447540249_Improved.csv
+results_student_447540249_improved.csv
 results_student_447540249_improved.xlsx
 
 ## Declaration

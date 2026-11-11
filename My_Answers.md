@@ -221,7 +221,8 @@ N1-N3 change which facilities are open, and N4 improves client assignments for t
 
 **Role of Shaking Mechanism:**
 
-Shaking perturbs the current solution so local search can leave a local optimum. In Plots 1 and 2, the step drops after flat periods are where shaking found a better solution. In Plot 3, it found none. Even so, every final cost stays above Gurobi’s optimum, so shaking helps but does not close the gap.
+Shaking perturbs the current solution so local search can leave a local optimum. In Plots 1 and 2, the step drops after flat periods are where shaking found a better solution. In Plot 3, it found none. Even so, every final cost stays above Gurobi optimum, so shaking helps but does not close the gap.
+
 ---
 
 ## Section F: Critical Reflection (3 marks)
@@ -273,6 +274,7 @@ VNS gives up 13.38% in cost on average. In return it saves about 2.5 s per insta
 **Practical Value of Heuristics:**
 
 Gurobi solved everything here, but its time grows faster and has long tails (up to 107 s). VNS-like heuristics give fast, predictable answers, which matters for re-planning, testing many scenarios and very large problems. The cost is the 13.38% gap, so they suit cases where speed matters more than the best cost.
+
 ---
 
 ## Section G: BONUS - VNS Improvement Challenge (+3 marks, optional)
@@ -304,13 +306,10 @@ The search can only add or swap facilities; hence, it cannot eliminate unneeded 
 **Corrected code:**
 
 ```python
-   for j in opened_indices:
-        if len(neighbors) >= max_neighbors:
-            break
-
-        neighbor_facility_opened = facility_opened.copy()
-        neighbor_facility_opened[j] = 0  # FIX: close only, do NOT open another facility
-'''
+for j in opened_indices:
+    ...
+    neighbor_facility_opened[j] = 0  # FIX: close only, do NOT open another facility
+```
 
 **Why does the fix work and why does it not break the rest of the algorithm?**
 

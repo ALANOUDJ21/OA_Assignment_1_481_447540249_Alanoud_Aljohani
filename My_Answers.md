@@ -237,7 +237,7 @@ Shaking perturbs the current solution so local search can leave a local optimum.
 1. Stronger shaking and more neighborhoods (moving several clients or facilities together) to escape local optima, especially under tight capacity.
 2. Better starting solution (greedy or LP-based) so the search does not start in a poor region.
 
-3. Multiple restarts, or VNS as a warm start for Gurobi, using VNS’s spare time (under 1 s) to close part of the gap.]
+3. Multiple restarts, or VNS as a warm start for Gurobi, using VNS’s spare time (under 1 s) to close part of the gap.
 
 ---
 
@@ -298,13 +298,17 @@ The search can only add or swap facilities; hence, it cannot eliminate unneeded 
 
 **Corrected code:**
 
+```python
    for j in opened_indices:
         if len(neighbors) >= max_neighbors:
             break
 
         neighbor_facility_opened = facility_opened.copy()
         neighbor_facility_opened[j] = 0  # FIX: close only, do NOT open another facility
+        ```
+
 **Why does the fix work and why does it not break the rest of the algorithm?**
+
 It adds the missing "close" move and maintains the feasibility check, so it cannot generate infeasible solutions. The other neighborhoods and the acceptance rule remain unchanged.
 ---
 
